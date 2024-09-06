@@ -18,7 +18,7 @@ import org.springframework.web.client.RestTemplate;
 public class UserController {
 
     private final RestTemplate restTemplate;
-    private static final String URL = "http://localhost:8081/auth";
+    private static final String URL = "http://auth-service:8081/auth";
     private static final String bearerToken = "Bearer ";
     private static final String authHeader = "Authorization";
 

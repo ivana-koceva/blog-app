@@ -1,0 +1,45 @@
+version: "3"
+services:
+  blog-service:
+    image: blog-app/blog
+    restart: always
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      MYSQL_HOST: blogdb
+      MYSQL_USER: root
+      MYSQL_PASSWORD: password
+      MYSQL_PORT: 3306
+  blogdb:
+    image: mysql
+    volumes:
+      - \\Desktop\\blogdb
+    ports:
+      - "3308:3306"
+    environment:
+      MYSQL_DATABASE: blogs
+      MYSQL_USER: root
+      MYSQL_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: password
+  auth-service:
+    image: blog-app/auth
+    restart: always
+    ports:
+      - "8081:8081"
+    environment:
+      MYSQL_HOST: userdb
+      MYSQL_USER: root
+      MYSQL_PASSWORD: password
+      MYSQL_PORT: 3306
+  userdb:
+    image: mysql
+    volumes:
+      - \\Desktop\\userdb
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_DATABASE: users
+      MYSQL_USER: root
+      MYSQL_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: password
