@@ -4,23 +4,31 @@ on:
     branches:
       - main
 jobs:
-    build:
-      name: push docker image to docker hub
-      runs-on: ubuntu-latest
-      steps:
-        - uses: actions/checkout@v2
-        - name: login to docker hub
-          id: docker-hub
-          env:
-            username: ${{secrets.DOCKERHUB_USERNAME}}
-            password: ${{secrets.DOCKERHUB_PASSWORD}}
-          run: |
-            docker login -u $username -p $password 
-        - name: build the docker image
-          id: build-docker-image
-          run: |
-            ls -la 
-            docker build . -f Dockerfile -t blog-app/blog:latest
-        - name: push the docker image
-          id: push-docker-image
-          run: docker push ${{secrets.DOCKERHUB_USERNAME}}/blog-app:latest
+  build:
+    name: push docker image to docker hub
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      # Maven build step
+      - name: Set up JDK 22
+        uses: actions/setup-java@v3
+        with:
+          java-version: '22'
+          distribution: 'temurin'
+
+      - name: Build with Maven
+        run: mvn clean package
+
+      - name: Login to Docker Hub
+        env:
+          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+          DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
+        run: |
+          echo $DOCKERHUB_PASSWORD | docker login -u $DOCKERHUB_USERNAME --password-stdin
+
+      - name: Build the Docker image
+        run: docker build . -f Dockerfile -t ${{ secrets.DOCKERHUB_USERNAME }}/blog-app:latest
+
+      - name: Push the Docker image
+        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/blog-app:latest
