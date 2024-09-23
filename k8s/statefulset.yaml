@@ -1,0 +1,108 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: blogdb-headless
+  namespace: blogs
+spec:
+  ports:
+    - port: 3306
+  clusterIP: None
+  selector:
+    app: blogdb
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: userdb-headless
+  namespace: blogs
+spec:
+  ports:
+    - port: 3306
+  clusterIP: None
+  selector:
+    app: userdb
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: blogdb
+  namespace: blogs
+spec:
+  serviceName: blogdb-headless
+  replicas: 1
+  selector:
+    matchLabels:
+      app: blogdb
+  template:
+    metadata:
+      labels:
+        app: blogdb
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+        - name: mysql
+          image: mysql:latest
+          ports:
+            - containerPort: 3306
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: blog-secrets
+                  key: MYSQL_ROOT_PASSWORD
+            - name: MYSQL_DATABASE
+              valueFrom:
+                configMapKeyRef:
+                  name: blog-config
+                  key: MYSQL_BLOG_HOST
+          volumeMounts:
+            - name: mysql-persistent-storage
+              mountPath: /var/lib/mysql
+  volumeClaimTemplates:
+    - metadata:
+        name: mysql-persistent-storage
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        resources:
+          requests:
+            storage: 1Gi
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: userdb
+  namespace: blogs
+spec:
+  serviceName: userdb-headless
+  replicas: 1
+  selector:
+    matchLabels:
+      app: userdb
+  template:
+    metadata:
+      labels:
+        app: userdb
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+        - name: mysql
+          image: mysql:latest
+          ports:
+            - containerPort: 3306
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: blog-secrets
+                  key: MYSQL_ROOT_PASSWORD
+          volumeMounts:
+            - name: mysql-persistent-storage
+              mountPath: /var/lib/mysql
+  volumeClaimTemplates:
+    - metadata:
+        name: mysql-persistent-storage
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        resources:
+          requests:
+            storage: 1Gi

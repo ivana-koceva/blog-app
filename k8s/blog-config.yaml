@@ -1,9 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: blog-config
-  namespace: blogs
-data:
-  MYSQL_BLOG_HOST: "blogdb"
-  MYSQL_USER_HOST: "userdb"
-  MYSQL_PORT: "3306"
