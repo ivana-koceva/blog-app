@@ -26,3 +26,6 @@ jobs:
         with:
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/blog-app:latest
+
+      - name: Log out from DockerHub
+        run: docker logout
