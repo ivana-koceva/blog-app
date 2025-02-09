@@ -36,13 +36,13 @@ public class BlogPostRestRestController implements BlogPostRestApi {
     }
 
     @PostMapping()
-    public ResponseEntity<BlogPostDTO> addBlogPost(@RequestHeader("Authorization") String token, @Valid @RequestBody BlogPostDTO blogPostDTO) {
+    public ResponseEntity<BlogPostDTO> addBlogPost(@Valid @RequestBody BlogPostDTO blogPostDTO) {
         logger.trace("BlogPostController - addBlogPost");
         return ResponseEntity.ok().body(this.blogPostService.create(blogPostDTO));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<BlogPostDTO> editBlogPost(@RequestHeader("Authorization") String token, @PathVariable Long id, @Valid @RequestBody BlogPostDTO blogPostDTO) {
+    public ResponseEntity<BlogPostDTO> editBlogPost(@PathVariable Long id, @Valid @RequestBody BlogPostDTO blogPostDTO) {
         logger.trace("BlogPostController - editBlogPost");
         return ResponseEntity.ok().body(this.blogPostService.update(id, blogPostDTO));
     }

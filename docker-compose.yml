@@ -9,58 +9,20 @@ services:
     depends_on:
       - blogdb
     environment:
-      MYSQL_HOST: ${BLOG_DB_HOST}
-      MYSQL_USER: ${BLOG_DB_USER}
-      MYSQL_PASSWORD: ${BLOG_DB_PASSWORD}
-      MYSQL_PORT: ${BLOG_DB_PORT}
-    networks:
-      - blog-network
-      - shared-network
+      POSTGRES_HOST: ${BLOG_DB_HOST}
+      POSTGRES_USER: ${BLOG_DB_USER}
+      POSTGRES_PASSWORD: ${BLOG_DB_PASSWORD}
+      POSTGRES_PORT: ${BLOG_DB_PORT}
+      POSTGRES_DB: ${BLOG_DB_NAME}
   blogdb:
-    image: mysql
+    image: postgres
     volumes:
-      - blogdb_data:/var/lib/mysql
+      - blogdb_data:/var/lib/postgresql/data
     ports:
-      - "3308:3306"
+      - "5432:5432"
     environment:
-      MYSQL_DATABASE: ${BLOG_DB_NAME}
-      MYSQL_PASSWORD: ${BLOG_DB_PASSWORD}
-      MYSQL_ROOT_PASSWORD: ${BLOG_DB_PASSWORD}
-    networks:
-      - blog-network
-  auth-service:
-    image: blog-app/auth
-    restart: always
-    ports:
-      - "${AUTH_APP_PORT}:8081"
-    depends_on:
-      - userdb
-    environment:
-      MYSQL_HOST: ${USER_DB_HOST}
-      MYSQL_USER: ${USER_DB_USER}
-      MYSQL_PASSWORD: ${USER_DB_PASSWORD}
-      MYSQL_PORT: ${USER_DB_PORT}
-    networks:
-      - auth-network
-      - shared-network
-  userdb:
-    image: mysql
-    volumes:
-      - userdb_data:/var/lib/mysql
-    ports:
-      - "3307:3306"
-    environment:
-      MYSQL_DATABASE: ${USER_DB_NAME}
-      MYSQL_PASSWORD: ${USER_DB_PASSWORD}
-      MYSQL_ROOT_PASSWORD: ${USER_DB_PASSWORD}
-    networks:
-      - auth-network
-
+      POSTGRES_DB: ${BLOG_DB_NAME}
+      POSTGRES_USER: ${BLOG_DB_USER}
+      POSTGRES_PASSWORD: ${BLOG_DB_PASSWORD}
 volumes:
   blogdb_data:
-  userdb_data:
-
-networks:
-  blog-network:
-  auth-network:
-  shared-network:

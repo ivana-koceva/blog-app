@@ -35,13 +35,13 @@ public class TagRestController implements TagRestApi {
     }
 
     @PostMapping()
-    public ResponseEntity<TagDTO> addTag(@RequestHeader("Authorization") String token, @Valid @RequestBody TagDTO tagDTO) {
+    public ResponseEntity<TagDTO> addTag(@Valid @RequestBody TagDTO tagDTO) {
         logger.trace("TagController - addTag");
         return ResponseEntity.ok().body(this.tagService.create(tagDTO));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<TagDTO> editTag(@RequestHeader("Authorization") String token, @PathVariable Long id, @Valid @RequestBody TagDTO tagDTO) {
+    public ResponseEntity<TagDTO> editTag(@PathVariable Long id, @Valid @RequestBody TagDTO tagDTO) {
         logger.trace("TagController - editTag");
         return ResponseEntity.ok().body(this.tagService.update(id, tagDTO));
     }

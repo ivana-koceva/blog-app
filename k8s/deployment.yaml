@@ -4,9 +4,9 @@ metadata:
   name: blog-config
   namespace: blogs
 data:
-  MYSQL_BLOG_HOST: "blogdb"
-  MYSQL_USER_HOST: "userdb"
-  MYSQL_PORT: "3306"
+  POSTGRES_HOST: "blogdb"
+  POSTGRES_PORT: "5432"
+  POSTGRES_DB: "blogs"
 ---
 apiVersion: v1
 kind: Secret
@@ -15,9 +15,8 @@ metadata:
   namespace: blogs
 type: Opaque
 data:
-  MYSQL_USER: cm9vdA==
-  MYSQL_PASSWORD: cGFzc3dvcmQ=
-  MYSQL_ROOT_PASSWORD: cGFzc3dvcmQ=
+  POSTGRES_USER: cG9zdGdyZXM=
+  POSTGRES_PASSWORD: YWRtaW4=
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -25,7 +24,7 @@ metadata:
   name: blog-deployment
   namespace: blogs
 spec:
-  replicas: 3
+  replicas: 2
   selector:
     matchLabels:
       app: blog
@@ -40,65 +39,28 @@ spec:
           ports:
             - containerPort: 8080
           env:
-            - name: MYSQL_HOST
+            - name: POSTGRES_HOST
               valueFrom:
                 configMapKeyRef:
                   name: blog-config
-                  key: MYSQL_BLOG_HOST
-            - name: MYSQL_PORT
+                  key: POSTGRES_HOST
+            - name: POSTGRES_PORT
               valueFrom:
                 configMapKeyRef:
                   name: blog-config
-                  key: MYSQL_PORT
-            - name: MYSQL_USER
-              valueFrom:
-                secretKeyRef:
-                  name: blog-secrets
-                  key: MYSQL_USER
-            - name: MYSQL_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: blog-secrets
-                  key: MYSQL_PASSWORD
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: auth-deployment
-  namespace: blogs
-spec:
-  replicas: 3
-  selector:
-    matchLabels:
-      app: auth
-  template:
-    metadata:
-      labels:
-        app: auth
-    spec:
-      containers:
-        - name: auth-app
-          image: ivanakoceva/auth-app
-          ports:
-            - containerPort: 8081
-          env:
-            - name: MYSQL_HOST
+                  key: POSTGRES_PORT
+            - name: POSTGRES_DB
               valueFrom:
                 configMapKeyRef:
                   name: blog-config
-                  key: MYSQL_USER_HOST
-            - name: MYSQL_PORT
-              valueFrom:
-                configMapKeyRef:
-                  name: blog-config
-                  key: MYSQL_PORT
-            - name: MYSQL_USER
+                  key: POSTGRES_DB
+            - name: POSTGRES_USER
               valueFrom:
                 secretKeyRef:
                   name: blog-secrets
-                  key: MYSQL_USER
-            - name: MYSQL_PASSWORD
+                  key: POSTGRES_USER
+            - name: POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: blog-secrets
-                  key: MYSQL_PASSWORD
+                  key: POSTGRES_PASSWORD

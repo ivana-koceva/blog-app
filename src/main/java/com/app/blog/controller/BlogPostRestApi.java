@@ -39,7 +39,7 @@ public interface BlogPostRestApi {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success")
     })
-    ResponseEntity<BlogPostDTO> addBlogPost(@RequestHeader("Authorization") String token, @Valid @RequestBody BlogPostDTO blogPostDTO);
+    ResponseEntity<BlogPostDTO> addBlogPost(@Valid @RequestBody BlogPostDTO blogPostDTO);
 
     @Operation(
             summary = "Edit a blog post",
@@ -48,7 +48,7 @@ public interface BlogPostRestApi {
             @ApiResponse(responseCode = "200", description = "Success"),
             @ApiResponse(responseCode = "400", description = "Bad Request")
     })
-    ResponseEntity<BlogPostDTO> editBlogPost(@RequestHeader("Authorization") String token, @PathVariable Long id, @Valid @RequestBody BlogPostDTO blogPostDTO);
+    ResponseEntity<BlogPostDTO> editBlogPost(@PathVariable Long id, @Valid @RequestBody BlogPostDTO blogPostDTO);
 
     @Operation(
             summary = "Partially edit a blog post",

@@ -37,7 +37,7 @@ public interface TagRestApi {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success")
     })
-    ResponseEntity<TagDTO> addTag(@RequestHeader("Authorization") String token, @Valid @RequestBody TagDTO tagDTO);
+    ResponseEntity<TagDTO> addTag(@Valid @RequestBody TagDTO tagDTO);
 
     @Operation(
             summary = "Edit a tag",
@@ -46,7 +46,7 @@ public interface TagRestApi {
             @ApiResponse(responseCode = "200", description = "Success"),
             @ApiResponse(responseCode = "400", description = "Bad Request")
     })
-    ResponseEntity<TagDTO> editTag(@RequestHeader("Authorization") String token, @PathVariable Long id, @Valid @RequestBody TagDTO tagDTO);
+    ResponseEntity<TagDTO> editTag(@PathVariable Long id, @Valid @RequestBody TagDTO tagDTO);
 
     @Operation(
             summary = "Delete a blog post",

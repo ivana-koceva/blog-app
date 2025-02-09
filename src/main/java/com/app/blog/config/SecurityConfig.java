@@ -29,6 +29,7 @@ public class SecurityConfig {
                         req.requestMatchers(HttpMethod.DELETE, "/auth/**").hasRole("ADMIN")
                                 .requestMatchers("/auth/**").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/blogs/**", "/tags/**").permitAll()
+                                .requestMatchers(HttpMethod.POST, "/blogs/**", "/tags/**").permitAll()
                                 .anyRequest()
                                 .authenticated()
                 ).addFilterBefore(jwtFilter(userController), UsernamePasswordAuthenticationFilter.class).build();

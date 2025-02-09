@@ -52,7 +52,7 @@ public class TagServiceImplementation implements TagService {
             logger.error("TagService - create error - Tag Already Exists");
             throw new TagAlreadyExistsException();
         }
-        String username = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+        String username = "user"; //SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
         Tag tag = Tag.builder().name(tagDTO.getName()).createdBy(username).build();
         tagRepository.save(tag);
         return tagDTO;

@@ -8,18 +8,20 @@ spec:
     app: blog
   ports:
     - protocol: TCP
-      port: 8080
+      port: 80
       targetPort: 8080
+  type: ClusterIP
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: auth-service
+  name: blogdb
   namespace: blogs
 spec:
   selector:
-    app: auth
+    app: blogdb
   ports:
     - protocol: TCP
-      port: 8081
-      targetPort: 8081
+      port: 5432
+      targetPort: 5432
+  clusterIP: None

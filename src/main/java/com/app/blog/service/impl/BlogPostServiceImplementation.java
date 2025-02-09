@@ -71,7 +71,7 @@ public class BlogPostServiceImplementation implements BlogPostService {
     @Override
     public BlogPostDTO create(BlogPostDTO blogPostDTO) {
         logger.trace("BlogPostService - create");
-        String username = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+        String username = "user"; //SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
         BlogPost blogPost = BlogPost.builder().title(blogPostDTO.getTitle()).text(blogPostDTO.getText()).tags(new HashSet<>()).createdBy(username).build();
         blogPostDTO.getTags().forEach(tag -> {
             Tag foundTag = this.tagRepository.findByName(tag).orElse(Tag.builder().name(tag).createdBy(username).blogPosts(new HashSet<>()).build());
@@ -91,7 +91,7 @@ public class BlogPostServiceImplementation implements BlogPostService {
         });
         if(Objects.equals(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString(), blogPost.getCreatedBy())
                 || SecurityContextHolder.getContext().getAuthentication().getAuthorities().toString().contains(role)) {
-        String username = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+        String username = "user"; //SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
         blogPost.setTitle(blogPostDTO.getTitle());
         blogPost.setText(blogPostDTO.getText());
         blogPostDTO.getTags().forEach(tag -> {
