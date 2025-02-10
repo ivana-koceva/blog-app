@@ -11,7 +11,7 @@ spec:
     - host: blog.local
       http:
         paths:
-          - path: /blogs
+          - path: /
             pathType: Prefix
             backend:
               service:
