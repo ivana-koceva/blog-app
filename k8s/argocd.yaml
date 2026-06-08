@@ -1,18 +1,18 @@
-apiVersion: argoproj.io/v1alpha1
-kind: Application
-metadata:
-  name: blog-app
-  namespace: argocd
-spec:
-  project: default
-  source:
-    repoURL: "https://github.com/ivana-koceva/blog-app.git"
-    targetRevision: main
-    path: k8s
-  destination:
-    server: https://kubernetes.default.svc
-    namespace: blogs
-  syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true
+# apiVersion: argoproj.io/v1alpha1
+# kind: Application
+# metadata:
+#   name: blog-app
+#   namespace: argocd
+# spec:
+#   project: default
+#   source:
+#     repoURL: "https://github.com/ivana-koceva/blog-app.git"
+#     targetRevision: main
+#     path: k8s
+#   destination:
+#     server: https://kubernetes.default.svc
+#     namespace: blogs
+#   syncPolicy:
+#     automated:
+#       prune: true
+#       selfHeal: true
