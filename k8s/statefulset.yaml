@@ -39,7 +39,7 @@ spec:
               value: trust
           volumeMounts:
             - name: blogdb-data
-              mountPath: /var/lib/postgresql/data
+              mountPath: /var/lib/postgresql
   volumeClaimTemplates:
     - metadata:
         name: blogdb-data
